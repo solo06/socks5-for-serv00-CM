@@ -34,9 +34,9 @@ jobs:
             echo "echo \"尝试登录 $username@$ssh...\"" >> sshpass.sh
             echo "current_time=\$(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> sshpass.sh
             echo "if sshpass -p '$password' ssh -o StrictHostKeyChecking=no '$username@$ssh' 'bash <(curl -s https://raw.githubusercontent.com/cmliu/socks5-for-serv00/main/check_cron.sh)'; then" >> sshpass.sh
-            echo "  echo -e \"服务器名称：$ssh\n 登录时间：\$current_time \n 状态：✅ 登录成功\" >> \$result_log" >> sshpass.sh
+            echo "  echo -e \"服务器名称：$ssh\n登录时间：\$current_time\n状态：✅ 登录成功\" >> \$result_log" >> sshpass.sh
             echo "else" >> sshpass.sh
-            echo "  echo -e \"服务器名称：$ssh\n 登录时间：\$current_time \n 状态：❌ 登录失败\" >> \$result_log" >> sshpass.sh
+            echo "  echo -e \"服务器名称：$ssh\n登录时间：\$current_time\n状态：❌ 登录失败\" >> \$result_log" >> sshpass.sh
             echo "fi" >> sshpass.sh
           done < <(jq -c '.[]' accounts.json)
           chmod +x sshpass.sh
