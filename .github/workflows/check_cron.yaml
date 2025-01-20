@@ -49,9 +49,9 @@ jobs:
         run: |
           while IFS= read -r line; do
             server_status=$(echo "$line")
-            curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
-              -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-              -d text="$server_status"
+            curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+              --data-urlencode "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+              --data-urlencode "text=$server_status"
           done < ssh_results.log
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
