@@ -34,9 +34,9 @@ jobs:
             echo "echo \"尝试登录 $username@$ssh...\"" >> sshpass.sh
             echo "current_time=\$(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> sshpass.sh
             echo "if sshpass -p '$password' ssh -o StrictHostKeyChecking=no '$username@$ssh' 'bash <(curl -s https://raw.githubusercontent.com/cmliu/socks5-for-serv00/main/check_cron.sh)'; then" >> sshpass.sh
-            echo "  echo \"服务器名称：$ssh\登录时间：\$current_time\状态：✅ 登录成功\" >> \$result_log" >> sshpass.sh
+            echo "  echo -e \"服务器名称：$ssh\n登录时间：\$current_time\n状态：✅ 登录成功\" >> \$result_log" >> sshpass.sh
             echo "else" >> sshpass.sh
-            echo "  echo \"服务器名称：$ssh\登录时间：\$current_time\状态：❌ 登录失败\" >> \$result_log" >> sshpass.sh
+            echo "  echo -e \"服务器名称：$ssh\n登录时间：\$current_time\n状态：❌ 登录失败\" >> \$result_log" >> sshpass.sh
             echo "fi" >> sshpass.sh
           done < <(jq -c '.[]' accounts.json)
           chmod +x sshpass.sh
@@ -49,9 +49,10 @@ jobs:
         run: |
           while IFS= read -r line; do
             server_status=$(echo "$line")
+            # 使用 $'\n' 保证换行符被正确解析
             curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
               --data-urlencode "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-              --data-urlencode "text=$server_status"
+              --data-urlencode "text=$(echo -e "$server_status")"
           done < ssh_results.log
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
