@@ -37,5 +37,3 @@ jobs:
 
       - name: Execute SSH Commands
         run: ./sshpass.sh
-          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-          -d text="UTC ${{ env.TIME }} : ❌ SSH login to server( ${{ secrets.SERVER_IP }} ) failed!"
